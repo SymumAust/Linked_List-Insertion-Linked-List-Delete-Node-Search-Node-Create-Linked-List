@@ -1,0 +1,180 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node* next;
+};
+Node* head;
+
+void createList(int arr[],int len)
+{
+
+    for(int i=len-1; i>=0; i--)
+    {
+        struct Node *temp = (struct Node*)malloc(sizeof(struct Node));
+        temp->data= arr[i];
+        temp->next=head;
+        head= temp;
+    }
+}
+
+void nodeInsert(int node, int choice)
+{
+   
+    if(choice ==0)
+    {
+        struct Node *temp = (struct Node*)malloc(sizeof(struct Node));
+        temp->data= node;
+        temp->next=head;
+        head= temp;
+    }
+    else if(choice == -1)
+    {
+        struct Node *newNode;
+        newNode = (struct Node*)malloc(sizeof(struct Node));
+        newNode->data = node;
+        newNode->next = NULL;
+
+        struct Node *temp = head;
+        while(temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+    else
+    {
+        struct Node *newNode;
+        newNode = (struct Node*)malloc(sizeof(struct Node));
+        newNode->data = node;
+
+        struct Node *temp = head;
+
+        for(int i=2; i < choice; i++)
+        {
+            if(temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+        }
+        newNode->next = temp->next;
+        temp->next = newNode;
+
+
+
+    }
+
+
+}
+void nodeDelete(int choice)
+{
+    if(choice ==0)
+    {
+        struct Node *temp = head;
+        head = temp->next;
+        free(temp);
+    }
+    else if(choice ==-1)
+    {
+        struct Node* temp = head;
+        while(temp->next->next!=NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = NULL;
+    }
+    else
+    {
+        struct Node *temp = head;
+        for(int i=2; i< choice; i++)
+        {
+            if(temp->next!=NULL)
+            {
+                temp = temp->next;
+            }
+        }
+        temp->next = temp->next->next;
+    }
+}
+bool nodeSearch(int node)
+{
+    struct Node *temp = head;
+    while(temp->next!=0)
+    {
+        if(node == temp->data)
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+void print()
+{
+    Node *temp = head;
+    cout << "\nList is:";
+    while(temp != NULL)
+    {
+        cout << temp->data<<" ";
+        temp = temp->next;
+    }
+    cout<<endl;
+}
+void printChoice()
+{
+    cout<<"\n1. Node Insert\n" << "2. Node Delete\n"<<
+        "3. Node Search\n"<<"4. Print the list\n"<<
+        "5. Program Exit\n"<<"Your Choice: ";
+}
+void printChoice2()
+{
+    cout<<"\nFor first node enter 0\n" << "For any node enter the position\n"
+        <<"For last node enter -1\n"<<"Your Choice: ";
+}
+int main()
+{
+    head = NULL;
+
+    //Initialization of a list
+    int arr[] = {1,5,8,7,9,2,4,3};
+    int len = sizeof(arr)/sizeof(arr[0]);
+    createList(arr,len);
+    while(true)
+    {
+        printChoice();
+        int x, node, choice;
+        cin>>x;
+        switch(x)
+        {
+        case 1:
+            cout<<"\nNode value: ";
+            cin>>node;
+
+            printChoice2();
+            cin>>choice;
+
+            nodeInsert(node,choice);
+            break;
+        case 2:
+            printChoice2();
+            cin >> choice;
+
+            nodeDelete(choice);
+            break;
+        case 3:
+            cout<<"\nNode value: ";
+            cin>>node;
+
+            cout<<"\nSearch Result(1/0): "<<nodeSearch(node)<<endl;
+            break;
+        case 4:
+            print();
+            break;
+        case 5:
+            return 0;
+        default:
+            cout << "Wrong Choice....\n";
+        }
+
+    }
+}
